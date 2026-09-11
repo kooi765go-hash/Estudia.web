@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EstudiaFácil</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#182033}
+header{background:#fff;border-bottom:1px solid #e5e7eb;padding:18px 6%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.logo{font-size:24px;font-weight:800;color:#4f46e5}.logo span{color:#111827}
+nav a{margin-left:20px;text-decoration:none;color:#4b5563;font-weight:600}
+.hero{padding:70px 6%;text-align:center;background:linear-gradient(135deg,#eef2ff,#fff)}
+.hero h1{font-size:48px;margin:0 0 15px}.hero h1 b{color:#4f46e5}.hero p{font-size:19px;color:#667085;max-width:650px;margin:0 auto 28px;line-height:1.6}
+.btn{display:inline-block;background:#4f46e5;color:white;padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:700;border:0;cursor:pointer}
+.container{max-width:1100px;margin:auto;padding:45px 6%}.section-title{text-align:center;font-size:30px;margin-bottom:25px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:white;padding:23px;border-radius:18px;border:1px solid #e8eaf0;box-shadow:0 5px 18px #00000008}
+.card .icon{font-size:34px}.card h3{margin:10px 0 7px}.card p{color:#667085;line-height:1.5}
+.tool{max-width:600px;margin:25px auto;background:white;padding:25px;border-radius:18px;border:1px solid #e8eaf0}
+input,select{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #d1d5db;border-radius:10px;font-size:16px}
+.result{margin-top:15px;font-weight:700;font-size:18px}
+.premium{background:#111827;color:white}.premium p{color:#d1d5db}.premium .btn{background:#fff;color:#111827}
+footer{text-align:center;padding:30px;background:#111827;color:#d1d5db;margin-top:30px}
+.small{font-size:13px;color:#98a2b3}
+@media(max-width:650px){.hero h1{font-size:36px}nav{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Estudia<span>Fácil</span> 📚</div>
+  <nav><a href="#herramientas">Herramientas</a><a href="#materias">Materias</a><a href="#premium">Premium</a></nav>
+</header>
+
+<section class="hero">
+  <h1>Estudiar puede ser <b>más fácil.</b></h1>
+  <p>Herramientas, ejercicios y recursos para ayudarte a estudiar mejor, practicar y organizar tus tareas.</p>
+  <a class="btn" href="#herramientas">Empezar gratis</a>
+</section>
+
+<section class="container" id="herramientas">
+  <h2 class="section-title">🛠️ Herramientas gratuitas</h2>
+  <div class="grid">
+    <div class="card"><div class="icon">🧮</div><h3>Calculadora de notas</h3><p>Calcula tu promedio rápidamente.</p><a class="btn" href="#calculadora">Usar</a></div>
+    <div class="card"><div class="icon">🧠</div><h3>Quiz rápido</h3><p>Pon a prueba tus conocimientos.</p><button class="btn" onclick="quiz()">Empezar</button></div>
+    <div class="card"><div class="icon">⏱️</div><h3>Temporizador</h3><p>Estudia con sesiones de concentración.</p><button class="btn" onclick="timer()">Iniciar 25 min</button></div>
+    <div class="card"><div class="icon">💡</div><h3>Idea de estudio</h3><p>Obtén una recomendación al azar.</p><button class="btn" onclick="idea()">Dame una</button></div>
+  </div>
+
+  <div class="tool" id="calculadora">
+    <h2>🧮 Calculadora de promedio</h2>
+    <p class="small">Escribe tres notas separadas por comas.</p>
+    <input id="grades" placeholder="Ejemplo: 4.0, 3.5, 4.8">
+    <button class="btn" onclick="average()">Calcular</button>
+    <div class="result" id="avg"></div>
+  </div>
+  <div class="tool"><div class="result" id="message">Aquí aparecerán tus resultados.</div></div>
+</section>
+
+<section class="container" id="materias">
+  <h2 class="section-title">📚 Aprende por materias</h2>
+  <div class="grid">
+    <div class="card"><h3>🔢 Matemáticas</h3><p>Operaciones, álgebra, geometría y práctica.</p></div>
+    <div class="card"><h3>🔬 Ciencias</h3><p>Biología, física y química explicadas de forma sencilla.</p></div>
+    <div class="card"><h3>🌎 Sociales</h3><p>Historia, geografía y economía.</p></div>
+    <div class="card"><h3>🇬🇧 Inglés</h3><p>Vocabulario, gramática y ejercicios.</p></div>
+  </div>
+</section>
+
+<section class="container" id="premium">
+  <div class="card premium">
+    <h2>⭐ EstudiaFácil Premium</h2>
+    <p>Más ejercicios, estadísticas de progreso, planes de estudio y herramientas avanzadas.</p>
+    <a class="btn" href="#" onclick="alert('La suscripción se conectaría aquí a un sistema de pagos cuando la página esté publicada.');return false;">Ver Premium</a>
+  </div>
+</section>
+
+<footer>
+  <strong>EstudiaFácil</strong><br>
+  Aprende • Practica • Mejora
+  <p class="small">Proyecto de demostración. La publicidad, pagos y afiliados se conectarían después.</p>
+</footer>
+
+<script>
+function average(){
+  const values=document.getElementById('grades').value.split(',').map(x=>Number(x.trim())).filter(x=>!isNaN(x));
+  const box=document.getElementById('avg');
+  if(!values.length){box.textContent='Escribe al menos una nota.';return}
+  const avg=values.reduce((a,b)=>a+b,0)/values.length;
+  box.textContent='Tu promedio es: '+avg.toFixed(2);
+}
+function quiz(){
+  const questions=[
+    ['¿Cuánto es 8 × 7?','56'],
+    ['¿Cuál es el planeta conocido como planeta rojo?','Marte'],
+    ['¿Cuántos lados tiene un hexágono?','6']
+  ];
+  const q=questions[Math.floor(Math.random()*questions.length)];
+  const answer=prompt(q[0]);
+  document.getElementById('message').textContent=answer?.toLowerCase()===q[1].toLowerCase()?'✅ ¡Correcto!':'❌ La respuesta correcta era '+q[1]+'.';
+}
+function idea(){
+  const ideas=['Explica el tema con tus propias palabras.','Haz 5 preguntas sobre lo que estudiaste.','Estudia 25 minutos y descansa 5.','Intenta resolver un ejercicio sin mirar la respuesta.'];
+  document.getElementById('message').textContent='💡 '+ideas[Math.floor(Math.random()*ideas.length)];
+}
+function timer(){
+  let seconds=1500; document.getElementById('message').textContent='⏱️ 25:00';
+  const interval=setInterval(()=>{seconds--;let m=Math.floor(seconds/60),s=seconds%60;document.getElementById('message').textContent='⏱️ '+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');if(seconds<=0){clearInterval(interval);document.getElementById('message').textContent='🎉 ¡Sesión terminada!';}},1000);
+}
+</script>
+</body>
+</html>
