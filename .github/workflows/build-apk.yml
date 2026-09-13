@@ -20,23 +20,13 @@ jobs:
       - name: Extraer proyecto Android
         run: |
           mkdir -p proyecto
-          unzip -q EstudiaFacil_Android_con_APK*.zip -d proyecto
-
-      - name: Activar AndroidX
-        run: |
-          find proyecto -name gradle.properties -exec sh -c 'echo "android.useAndroidX=true" >> "$1"; echo "android.enableJetifier=true" >> "$1"' _ {} \;
-
-      - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.9'
+          unzip -q EstudiaFacil_Android_con_APK_automatico.zip -d proyecto
 
       - name: Construir APK
         run: |
-          PROJECT_DIR=$(find proyecto -name settings.gradle -o -name settings.gradle.kts | head -n 1)
-          PROJECT_DIR=$(dirname "$PROJECT_DIR")
+          PROJECT_DIR=$(find proyecto -name settings.gradle -type f -exec dirname {} \; | head -n 1)
           cd "$PROJECT_DIR"
-          gradle assembleDebug --no-daemon
+          gradle assembleDebug --no-daemon -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
 
       - name: Preparar APK
         run: |
