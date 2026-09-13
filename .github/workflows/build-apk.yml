@@ -19,19 +19,32 @@ jobs:
 
       - name: Extraer proyecto Android
         run: |
-          unzip -q EstudiaFacil_Android_con_APK_automatico.zip -d proyecto
-          
+          mkdir -p proyecto
+          unzip -q EstudiaFacil_Android_con_APK*.zip -d proyecto
+
+      - name: Activar AndroidX
+        run: |
+          find proyecto -name gradle.properties -exec sh -c 'echo "android.useAndroidX=true" >> "$1"; echo "android.enableJetifier=true" >> "$1"' _ {} \;
+
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
       - name: Construir APK
-        working-directory: proyecto/EstudiaFacil_Android
-        run: gradle assembleDebug --no-daemon
+        run: |
+          PROJECT_DIR=$(find proyecto -name settings.gradle -o -name settings.gradle.kts | head -n 1)
+          PROJECT_DIR=$(dirname "$PROJECT_DIR")
+          cd "$PROJECT_DIR"
+          gradle assembleDebug --no-daemon
+
+      - name: Preparar APK
+        run: |
+          mkdir -p dist
+          find proyecto -path "*/app/build/outputs/apk/debug/*.apk" -exec cp {} dist/EstudiaFacil.apk \;
 
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
           name: EstudiaFacil-APK
-          path: proyecto/EstudiaFacil_Android/app/build/outputs/apk/debug/app-debug.apk
+          path: dist/EstudiaFacil.apk
