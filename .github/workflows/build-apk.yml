@@ -22,16 +22,23 @@ jobs:
           mkdir -p proyecto
           unzip -q EstudiaFacil_Android_con_APK_automatico.zip -d proyecto
 
+      - name: Activar AndroidX
+        run: |
+          PROJECT_DIR=$(find proyecto -name settings.gradle -o -name settings.gradle.kts | head -n 1 | xargs dirname)
+          echo "android.useAndroidX=true" > "$PROJECT_DIR/gradle.properties"
+          echo "android.enableJetifier=true" >> "$PROJECT_DIR/gradle.properties"
+
       - name: Construir APK
         run: |
-          PROJECT_DIR=$(find proyecto -name settings.gradle -type f -exec dirname {} \; | head -n 1)
+          PROJECT_DIR=$(find proyecto -name settings.gradle -o -name settings.gradle.kts | head -n 1 | xargs dirname)
           cd "$PROJECT_DIR"
-          gradle assembleDebug --no-daemon -Pandroid.useAndroidX=true -Pandroid.enableJetifier=true
+          gradle assembleDebug --no-daemon --stacktrace
 
       - name: Preparar APK
         run: |
           mkdir -p dist
-          find proyecto -path "*/app/build/outputs/apk/debug/*.apk" -exec cp {} dist/EstudiaFacil.apk \;
+          PROJECT_DIR=$(find proyecto -name settings.gradle -o -name settings.gradle.kts | head -n 1 | xargs dirname)
+          find "$PROJECT_DIR/app/build/outputs/apk/debug" -name "*.apk" -exec cp {} dist/EstudiaFacil.apk \;
 
       - name: Guardar APK
         uses: actions/upload-artifact@v4
